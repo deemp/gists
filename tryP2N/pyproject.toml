@@ -14,14 +14,13 @@ httpx = "^0.23.3"
 nltk = "^3.8.1"
 pandas = "^1.5.3"
 selenium = "^4.8.2"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.15.3"
 ipykernel = "^6.21.2"
 jupyter = "^1.0.0"
 mypy = "^1.0.1"
-
-[tool.poetry.dev-dependencies]
-uvicorn = "^0.18.3"
-manage-fastapi = "^1.1.1"
-pylint = "^2.15.3"
+jupyter-server = "2.3.0"
 
 [tool.poetry.scripts]
 app = 'app.main:main'
