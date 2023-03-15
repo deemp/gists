@@ -5,13 +5,13 @@
       url = "github:nix-community/poetry2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-utils.url = "github:numtide/flake-utils";
   };
   description = "A very basic flake";
 
-  outputs = inputs:
-    let system = "x86_64-linux"; in
+  outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem (system:
     {
-      devShells.${system}.default =
+      devShells.default =
         let
           pkgs = inputs.nixpkgs.legacyPackages.${system};
           poetry2nix = inputs.poetry2nix.legacyPackages.${system};
@@ -21,25 +21,25 @@
               my-app = ./src;
             };
             python = pkgs.python310;
-            overrides = poetry2nix.overrides.withDefaults (self: super:
-              let
-                # workaround https://github.com/nix-community/poetry2nix/issues/568
-                addBuildInputs = name: buildInputs: super.${name}.overridePythonAttrs (old: {
-                  buildInputs = (builtins.map (x: super.${x}) buildInputs) ++ (old.buildInputs or [ ]);
-                });
-                mkOverrides = pkgs.lib.attrsets.mapAttrs (name: value: addBuildInputs name value);
-              in
-              mkOverrides {
-                jupyter-server-terminals = [ "hatchling" ];
-                bs4 = [ "setuptools" ];
-                jupyter-events = [ "hatchling" ];
-                jupyter-server = [ "hatchling" ];
-              }
-            );
+            # overrides = poetry2nix.overrides.withDefaults (self: super:
+            #   let
+            #     # workaround https://github.com/nix-community/poetry2nix/issues/568
+            #     addBuildInputs = name: buildInputs: super.${name}.overridePythonAttrs (old: {
+            #       buildInputs = (builtins.map (x: super.${x}) buildInputs) ++ (old.buildInputs or [ ]);
+            #     });
+            #     mkOverrides = pkgs.lib.attrsets.mapAttrs (name: value: addBuildInputs name value);
+            #   in
+            #   mkOverrides {
+            #     jupyter-server-terminals = [ "hatchling" ];
+            #     bs4 = [ "setuptools" ];
+            #     jupyter-events = [ "hatchling" ];
+            #     jupyter-server = [ "hatchling" ];
+            #   }
+            # );
           };
         in
         myAppEnv.env.overrideAttrs (oldAttrs: {
           buildInputs = [ pkgs.hello ];
         });
-    };
+    });
 }
