@@ -1,0 +1,96 @@
+{
+  "nodes": {
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1681202837,
+        "narHash": "sha256-H+Rh19JDwRtpVPAWp64F+rlEtxUWBAQW28eAi3SRSzg=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "cfacdce06f30d2b68473a46042957675eebb3401",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "cfacdce06f30d2b68473a46042957675eebb3401",
+        "type": "github"
+      }
+    },
+    "jose": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1667318871,
+        "narHash": "sha256-K8bM+p0mu5VNPG1R7ryj/fGhA49lhOC1wP5FORWGSxs=",
+        "owner": "frasertweedale",
+        "repo": "hs-jose",
+        "rev": "ea33a544bb8af526aae28a0e866f49e20cf7b06b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "frasertweedale",
+        "repo": "hs-jose",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1683686518,
+        "narHash": "sha256-ieG0J4GCUqOE9Wo8cNSsa1Ev9QKMLrHANOlu22v17bo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "12ba1a5f90b16acdca741ac82d8204b3ec8c2aaf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "12ba1a5f90b16acdca741ac82d8204b3ec8c2aaf",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "jose": "jose",
+        "nixpkgs": "nixpkgs",
+        "servant": "servant"
+      }
+    },
+    "servant": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681942557,
+        "narHash": "sha256-eIyS///k7+KS4ca5Z6SoRSMhStCCAMAdEgUWbcswx7U=",
+        "owner": "deemp",
+        "repo": "servant",
+        "rev": "351ae1541b776d5040572a90a9be87fc330b129e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "deemp",
+        "repo": "servant",
+        "type": "github"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
