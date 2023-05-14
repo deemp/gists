@@ -1,0 +1,258 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           back
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/value/back#readme>
+homepage:       https://github.com/value/back#readme
+bug-reports:    https://github.com/value/back/issues
+author:         value
+maintainer:     value
+copyright:      value
+license:        BSD3
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/value/back
+
+library
+  exposed-modules:
+      API.Endpoints.API1.News
+      API.Endpoints.API1.Root
+      API.Endpoints.API1.User
+      API.OpenAPI3
+      API.Prelude
+      API.Root
+      API.TH
+      API.Types.Instances
+      API.Types.News
+      API.Types.User
+      App
+      Common.Prelude
+      Common.TH
+      Controller.Effects.News
+      Controller.Effects.User
+      Controller.News
+      Controller.Prelude
+      Controller.Types.News
+      Controller.Types.User
+      Controller.User
+      External.Logger
+      External.Passwords
+      External.SqlDatabase
+      Persist.Effects.News
+      Persist.Effects.User
+      Persist.Model
+      Persist.News
+      Persist.Prelude
+      Persist.Types.News
+      Persist.Types.User
+      Persist.User
+      Server.Config
+      Server.Server
+      Service.Effects.News
+      Service.Effects.User
+      Service.News
+      Service.Prelude
+      Service.Types.News
+      Service.Types.User
+      Service.User
+  other-modules:
+      Paths_back
+  hs-source-dirs:
+      src
+  default-extensions:
+      BlockArguments
+      ConstraintKinds
+      DataKinds
+      DeriveAnyClass
+      DeriveGeneric
+      DeriveGeneric
+      DerivingStrategies
+      DuplicateRecordFields
+      FlexibleContexts
+      FlexibleInstances
+      GADTs
+      GeneralizedNewtypeDeriving
+      ImplicitParams
+      ImportQualifiedPost
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      NamedFieldPuns
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RankNTypes
+      RecordWildCards
+      ScopedTypeVariables
+      StandaloneDeriving
+      StrictData
+      TemplateHaskell
+      TupleSections
+      TypeApplications
+      TypeFamilies
+      TypeOperators
+      UndecidableInstances
+      ViewPatterns
+      StrictData
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -fplugin=Effectful.Plugin
+  build-depends:
+      aeson
+    , async
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , data-default
+    , directory
+    , effectful
+    , effectful-core
+    , effectful-plugin
+    , effectful-th
+    , esqueleto
+    , exceptions
+    , filepath
+    , first-class-families
+    , generic-lens
+    , hashable
+    , http-api-data
+    , insert-ordered-containers
+    , jose
+    , lens
+    , monad-logger
+    , monad-logger-aeson
+    , mtl
+    , openapi3
+    , password
+    , persistent
+    , persistent-postgresql
+    , resource-pool
+    , servant
+    , servant-auth
+    , servant-auth-server
+    , servant-client
+    , servant-docs
+    , servant-openapi3
+    , servant-queryparam-core
+    , servant-queryparam-server
+    , servant-server
+    , stm-containers
+    , string-interpolate
+    , symbols
+    , template-haskell
+    , text
+    , time
+    , transformers
+    , wai
+    , warp
+    , yaml
+  default-language: Haskell2010
+
+executable back
+  main-is: Main.hs
+  other-modules:
+      Paths_back
+  hs-source-dirs:
+      app/Server
+  default-extensions:
+      BlockArguments
+      ConstraintKinds
+      DataKinds
+      DeriveAnyClass
+      DeriveGeneric
+      DeriveGeneric
+      DerivingStrategies
+      DuplicateRecordFields
+      FlexibleContexts
+      FlexibleInstances
+      GADTs
+      GeneralizedNewtypeDeriving
+      ImplicitParams
+      ImportQualifiedPost
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      NamedFieldPuns
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RankNTypes
+      RecordWildCards
+      ScopedTypeVariables
+      StandaloneDeriving
+      StrictData
+      TemplateHaskell
+      TupleSections
+      TypeApplications
+      TypeFamilies
+      TypeOperators
+      UndecidableInstances
+      ViewPatterns
+      StrictData
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -fplugin=Effectful.Plugin -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      back
+    , base >=4.7 && <5
+    , effectful-core
+    , effectful-plugin
+    , string-interpolate
+    , wai
+  default-language: Haskell2010
+
+executable gen-openapi3
+  main-is: Main.hs
+  other-modules:
+      Paths_back
+  hs-source-dirs:
+      app/GenerateOpenAPI3
+  default-extensions:
+      BlockArguments
+      ConstraintKinds
+      DataKinds
+      DeriveAnyClass
+      DeriveGeneric
+      DeriveGeneric
+      DerivingStrategies
+      DuplicateRecordFields
+      FlexibleContexts
+      FlexibleInstances
+      GADTs
+      GeneralizedNewtypeDeriving
+      ImplicitParams
+      ImportQualifiedPost
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      NamedFieldPuns
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RankNTypes
+      RecordWildCards
+      ScopedTypeVariables
+      StandaloneDeriving
+      StrictData
+      TemplateHaskell
+      TupleSections
+      TypeApplications
+      TypeFamilies
+      TypeOperators
+      UndecidableInstances
+      ViewPatterns
+      StrictData
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -fplugin=Effectful.Plugin -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      back
+    , base >=4.7 && <5
+    , effectful-core
+    , effectful-plugin
+    , string-interpolate
+    , wai
+  default-language: Haskell2010
