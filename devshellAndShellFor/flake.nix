@@ -24,7 +24,9 @@
       # # An override should include a local package into the Haskell package set
       override = {
         overrides = self: super: {
-          "${packageName1}" = self.callCabal2nix packageName1 ./${packageName1} { };
+          "${packageName1}" = pkgs.haskell.lib.overrideCabal (self.callCabal2nix packageName1 ./${packageName1} { }) (x: {
+            libraryToolDepends = [ pkgs.zlib ] ++ (x.libraryToolDepends or [ ]);
+          });
           "${packageName2}" = self.callCabal2nix packageName2 ./${packageName2} { "${packageName1}" = self.${packageName1}; };
         };
       };
