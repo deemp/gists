@@ -1,4 +1,6 @@
 module Lib2 (someFunc) where
 
+import qualified Lib1
+
 someFunc :: IO ()
-someFunc = putStrLn "hello"
+someFunc = Lib1.someFunc
