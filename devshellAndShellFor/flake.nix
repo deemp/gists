@@ -42,6 +42,7 @@
         bash.extra = ''
           cabal build all
         '';
+        packages = [ pkgs.hpack ];
         packagesFrom = [ devShells.shellFor ];
         commands = [
           (let cabal = pkgs.cabal-install; in { name = cabal.pname; help = cabal.meta.description; package = cabal; })
