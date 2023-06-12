@@ -2,7 +2,7 @@
 
 This is a minimal flake for developing local `Haskell` packages.
 
-It composes a [devshell](https://github.com/numtide/devshell) and a [shellFor](https://nixos.wiki/wiki/Haskell#Using_shellFor_.28multiple_packages.29).
+It provides a [shellFor](https://nixos.wiki/wiki/Haskell#Using_shellFor_.28multiple_packages.29) as an input to[devshell](https://github.com/numtide/devshell).
 
 ## This flake
 
