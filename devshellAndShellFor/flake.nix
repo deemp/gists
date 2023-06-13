@@ -45,8 +45,8 @@
         packages = [ pkgs.hpack ];
         packagesFrom = [ devShells.shellFor ];
         commands = [
-          (let cabal = pkgs.cabal-install; in { name = cabal.pname; help = cabal.meta.description; package = cabal; })
-          (let hls = hpkgs.haskell-language-server; in { name = hls.pname; help = hls.meta.description; package = hls; })
+          (let cabal = pkgs.cabal-install; in { name = cabal.pname; help = cabal.meta.description; package = cabal; category = "tools"; })
+          (let hls = hpkgs.haskell-language-server; in { name = hls.pname; help = hls.meta.description; package = hls; category = "tools"; })
         ];
       };
     in
