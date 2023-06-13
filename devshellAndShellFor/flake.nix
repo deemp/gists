@@ -42,6 +42,9 @@
         bash.extra = ''
           cabal build all
         '';
+        # use packagesFrom if you need a combined devShell: shellFor + devshell
+        # otherwise, direnv can run multiple devshells
+        packagesFrom = [ devShells.shellFor ];
         packages = [ pkgs.hpack ];
         commands = [
           (let cabal = pkgs.cabal-install; in { name = cabal.pname; help = cabal.meta.description; package = cabal; category = "tools"; })

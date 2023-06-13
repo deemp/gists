@@ -4,9 +4,14 @@ This is a minimal [flake](https://nixos.wiki/wiki/Flakes) for developing local `
 
 It provides a [shellFor](https://nixos.wiki/wiki/Haskell#Using_shellFor_.28multiple_packages.29) as an input to [devshell](https://github.com/numtide/devshell).
 
+If you'd like to run `shellFor` and `devshell` separately:
+
+- don't use `packagesFrom` in [flake.nix](./flake.nix)
+- run both devshells in [.envrc](./.envrc)
+
 ## This flake
 
-The following tools are available in the `devShell`:
+The following tools are available in the default `devShell`:
 
 - `cabal-install`
 - `hpack`
