@@ -154,11 +154,11 @@
         "slimlock": "slimlock"
       },
       "locked": {
-        "lastModified": 1690475522,
-        "narHash": "sha256-QsLYbofwO6neFvBu0WX0nEsjYrxji6BqUUi1lNsDNAY=",
+        "lastModified": 1690481124,
+        "narHash": "sha256-BiDhpIzTkOKaUYomRHFFkAsqBQ6NKa9LTGuqYI+7yoY=",
         "owner": "deemp",
         "repo": "purescript-overlay",
-        "rev": "94be3bfbe51375b7396c930fb9b525befd0d03ae",
+        "rev": "17bc34ed939590b977493f494b8be0aa1c32b535",
         "type": "github"
       },
       "original": {
