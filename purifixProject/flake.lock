@@ -1,26 +1,5 @@
 {
   "nodes": {
-    "devshell": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1688380630,
-        "narHash": "sha256-8ilApWVb1mAi4439zS3iFeIT0ODlbrifm/fegWwgHjA=",
-        "owner": "numtide",
-        "repo": "devshell",
-        "rev": "f9238ec3d75cefbb2b42a44948c4e8fb1ae9a205",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "devshell",
-        "type": "github"
-      }
-    },
     "easy-purescript-nix": {
       "inputs": {
         "flake-utils": "flake-utils"
@@ -41,7 +20,7 @@
     },
     "flake-utils": {
       "inputs": {
-        "systems": "systems_2"
+        "systems": "systems"
       },
       "locked": {
         "lastModified": 1685518550,
@@ -74,11 +53,11 @@
     },
     "flakes": {
       "locked": {
-        "lastModified": 1690362185,
-        "narHash": "sha256-aS/YCaFESxIrjPVyo4kVsyNadMhcUmHdIO2EY0MGWtA=",
+        "lastModified": 1690453189,
+        "narHash": "sha256-OipR8L3Ojric9M5gcPrxh+q60WcizT1qVL13qxITaqw=",
         "owner": "deemp",
         "repo": "flakes",
-        "rev": "471eb7ea86412540b654970516f26294a55f054e",
+        "rev": "2224f62b630f2bf2a5dda9f2d608f6195e37e4bd",
         "type": "github"
       },
       "original": {
@@ -175,15 +154,15 @@
         "slimlock": "slimlock"
       },
       "locked": {
-        "lastModified": 1690222840,
-        "narHash": "sha256-1cXmpf51Wam+91vX8JY+ScN+V4ZIansV94CMulspirY=",
-        "owner": "thomashoneyman",
+        "lastModified": 1690475522,
+        "narHash": "sha256-QsLYbofwO6neFvBu0WX0nEsjYrxji6BqUUi1lNsDNAY=",
+        "owner": "deemp",
         "repo": "purescript-overlay",
-        "rev": "df8b03689a92d5be94732b445206d0e4837d395f",
+        "rev": "94be3bfbe51375b7396c930fb9b525befd0d03ae",
         "type": "github"
       },
       "original": {
-        "owner": "thomashoneyman",
+        "owner": "deemp",
         "repo": "purescript-overlay",
         "type": "github"
       }
@@ -246,7 +225,6 @@
     },
     "root": {
       "inputs": {
-        "devshell": "devshell",
         "easy-purescript-nix": "easy-purescript-nix",
         "flakes": "flakes",
         "nixpkgs": "nixpkgs",
@@ -276,21 +254,6 @@
       }
     },
     "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

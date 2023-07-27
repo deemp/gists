@@ -1,0 +1,3 @@
+{
+    "purescript.buildCommand": "spago build --json-errors"
+}

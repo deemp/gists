@@ -16,6 +16,7 @@ package:
   name: purifix-project
   publish:
     version: 0.1.0
+    license: MIT
 workspace:
   lock: true
   extra_packages: {}

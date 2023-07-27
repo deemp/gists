@@ -1,2 +1,5 @@
 result
 output
+.direnv
+.spago
+.psc-ide-port

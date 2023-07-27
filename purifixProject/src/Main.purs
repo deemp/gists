@@ -78,8 +78,6 @@ handleAction = case _ of
         curDateTime' = adjust (TD.Milliseconds $ toNumber offsetUTCPlus3) curDateTime
       H.modify_ $ (\_ -> curDateTime')
 
--- TODO auto-reload
-
 type State = Maybe DateTime
 
 data Action
