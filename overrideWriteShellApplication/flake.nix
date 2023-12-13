@@ -11,12 +11,32 @@
         helloApp = (pkgs.writeShellApplication {
           name = "hello";
           text = ''printf "hello!\n"'';
-        }).overrideAttrs (prev: {
-          postPhases = [ "postInstall" ];
-          postInstall = ''
-            doesn't fail
+        })
+        .overrideAttrs (prev: {
+          buildCommand = null;
+          passAsFile = [];
+          phases = [ "installPhase" "checkPhase" ];
+          installPhase = ''
+            runHook preInstall
+
+            target=$out${pkgs.lib.escapeShellArg "/bin/${prev.name}"}
+
+            mkdir -p "$(dirname "$target")"
+
+            if [ -e "$textPath" ]; then
+              mv "$textPath" "$target"
+            else
+              echo -n "$text" > "$target"
+            fi
+
+            if [ -n "$executable" ]; then
+              chmod +x "$target"
+            fi
+
+            runHook postInstall
           '';
-        });
+        })
+        ;
 
         hello = pkgs.hello.overrideAttrs (prev: {
           postPhases = [ "postInstall" ];
