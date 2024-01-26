@@ -2,7 +2,6 @@ name: What is truthy?
 
 on:
   workflow_dispatch:
-env:
 
 jobs:
   truthy:
@@ -22,7 +21,6 @@ jobs:
           - yes
           - no
           - 1
-          - ${{ env.hello }}
 
     steps:
       - name: true-path
@@ -31,3 +29,20 @@ jobs:
       - name: false-path
         if: '! matrix.runme'
         run: echo "${{ matrix.runme }} evaluates false"
+
+  undefined:
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        runme:
+          - foo: true
+          - { }
+    
+    steps:
+      - name: true-path
+        if: matrix.runme.foo
+        run: echo "${{ matrix.runme.foo }} evaluates true"
+      - name: false-path
+        if: (! matrix.runme.foo)
+        run: echo "${{ matrix.runme.foo }} evaluates false"     
+      
