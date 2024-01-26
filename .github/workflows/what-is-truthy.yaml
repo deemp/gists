@@ -27,5 +27,5 @@ jobs:
         if: matrix.runme
         run: echo "${{ matrix.runme }} evaluates true"
       - name: false-path
-        if: ${{ ! matrix.runme }}
+        if: '! matrix.runme'
         run: echo "${{ matrix.runme }} evaluates false"
