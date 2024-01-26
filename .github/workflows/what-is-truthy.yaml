@@ -2,6 +2,7 @@ name: What is truthy?
 
 on:
   workflow_dispatch:
+env:
 
 jobs:
   truthy:
@@ -21,6 +22,7 @@ jobs:
           - yes
           - no
           - 1
+          - ${{ env.hello }}
 
     steps:
       - name: true-path
