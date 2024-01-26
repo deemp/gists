@@ -1,0 +1,29 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  truthy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runme:
+          - false
+          - 0
+          - -0
+          - 0n
+          - ""
+          - ''
+          - null
+          - undefined
+          - NaN
+          - yes
+          - no
+          - 1
+
+    steps:
+      - name: true-path
+        if: matrix.runme
+        run: echo "${{ matrix.runme }} evaluates true"
+      - name: false-path
+        if: ! matrix.runme
+        run: echo "${{ matrix.runme }} evaluates false"
