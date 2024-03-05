@@ -1,0 +1,96 @@
+MSA = monitoring system application
+MSD = monitoring system daemon
+MSL = monitoring system leader
+FE = front-end application
+
+We assume 500.000 requests per minute.
+Let REQUESTS_PER_HOUR = 500.000 requests per minute * 30 minutes = 15.000.000 requests.
+
+We will convert each beacon call to a triplet of 64-bit numbers and operate on these triplets.
+Ideally, we will need 64*3*15*10^6/8/1024/1024
+
+Nodes are re-indexed from 0 to 99.
+On each node, there is an FE and an MSA.
+An MSA is an MSD.
+It can conditionally be an MSL.
+
+Begin
+    SLOWEST_USERS: HashSet[UID] := {}
+    INDEX: Uint := get index of the current node
+
+    function GET_CURRENT_TIME(): Uint :=
+        CURRENT_TIME: Time := current time in seconds from 00:00
+        return CURRENT_TIME
+
+    function GET_CURRENT_ITERATION(): Uint :=
+        CURRENT_TIME: Time := GET_CURRENT_TIME
+        ITERATION: Uint := (CURRENT_TIME / 60) rounded down
+        return ITERATION
+
+    function GET_FIRST_LEADER(): Uint :=
+        CURRENT_ITERATION: Uint := GET_CURRENT_ITERATION()
+        FIRST_LEADER: Uint := CURRENT_ITERATION modulo 100
+        return FIRST_LEADER
+
+    function GET_LEADERS(): Uint :=
+        FIRST_LEADER: Uint := GET_FIRST_LEADER()
+        LEADERS: [Uint] := [FIRST_LEADER % 100, (FIRST_LEADER + 1) % 100, (FIRST_LEADER + 2) % 100]
+        return LEADERS
+
+    function MAIN():
+        thread1:
+            do: provide the endpoint /daemon for POST requests with payload containing beacon call data
+
+            while true:
+                while true
+                    (UID, TS1, TS2): (UID, Time, Time) := await a request on /daemon
+                    for LEADER in GET_LEADERS():
+                        send (UID, TS1, TS2) to /leader endpoint of LEADER
+        thread2:
+            do: provide the endpoint /slowest for POST requests with payload containing a list of slowest users
+
+            while true:
+                SLOWEST_USERS_LIST: [UID] := await a request on /slowest
+                SLOWEST_USERS := hashset constructed from SLOWEST_USERS_LIST
+
+        thread3:
+            do: provide the endpoint /leader for POST requests with payload containing beacon call data
+
+            ITERATION: Uint := GET_CURRENT_ITERATION()
+
+            while true:
+                if INDEX in GET_LEADERS():
+                    (UID, TS1, TS2): (Uint, Time, Time) := await a request on /leader
+                    REQUESTS_WINDOW := append (UID, TS2-TS1, TS2) to REQUESTS_WINDOW
+                    NEW_ITERATION: Uint := GET_CURRENT_ITERATION()
+
+                    if NEW_ITERATION != ITERATION:
+                        ITERATION := NEW_ITERATION
+
+                        REQUESTS_FILTERED: [(Uint, Time, Time)] :=
+                            from REQUESTS_WINDOW filter out values (_, _, TS2) where TS2 < (CURRENT_TIME - TIME_WINDOW)
+
+                        USER_DATA: Map[UID, (Time, Uint)] := {} with default value equal to (0, 0)
+
+                        for REQUEST in REQUESTS_FILTERED:
+                            (UID, AVERAGE_TIME, _) := REQUEST
+                            (AVERAGE_TIME, NUMBER_OF_PROCESSED_REQUESTS) := USER_DATA[UID]
+                            NEW_NUMBER_OF_PROCESSED_REQUESTS: Uint := NUMBER_OF_PROCESSED_REQUESTS + 1
+                            NEW_AVERAGE_TIME: Uint := (AVERAGE_TIME * NUMBER_OF_PROCESSED_REQUESTS + AVERAGE_TIME) / NEW_NUMBER_OF_PROCESSED_REQUESTS
+                            USER_DATA[UID] := (NEW_AVERAGE_TIME, NEW_NUMBER_OF_PROCESSED_REQUESTS)
+
+                        USER_DATA: [(UID, Time)] := empty array
+                        for (UID, (AVERAGE_TIME, _)) in items(USER_DATA):
+                            append (UID, AVERAGE_TIME) to USER_DATA
+
+                        THRESHOLD: Time :=
+                            find via binary search the max time
+                            for which in USER_DATA there are no more than 10% users with larger average time
+
+                        SLOWEST_USERS := users that have larger than Average time in USER_DATA
+
+                        for MSD in MSDS:
+                            send SLOWEST_USERS to the /slowest endpoint of MSD
+                        break
+
+End
