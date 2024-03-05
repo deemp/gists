@@ -54,33 +54,33 @@ Begin
 
             while true:
                 if INDEX in GET_LEADERS():
-                    (UID, TS1, TS2): (Uint, Time, Time) := await a request on /leader
+                    (UID, TS1, TS2): (UID, Time, Time) := await a request on /leader
                     REQUESTS_WINDOW := append (UID, TS2-TS1, TS2) to REQUESTS_WINDOW
                     NEW_ITERATION: Uint := GET_CURRENT_ITERATION()
 
                     if NEW_ITERATION != ITERATION:
                         ITERATION := NEW_ITERATION
 
-                        REQUESTS_FILTERED: [(Uint, Time, Time)] :=
+                        REQUESTS_FILTERED: [(UID, Time, Time)] :=
                             elements (_, _, TS2) from REQUESTS_WINDOW where TS2 < (CURRENT_TIME - TIME_WINDOW)
-
-                        USER_DATA_COMBINED: Map[UID, (Time, Uint)] := {} with default value equal to (0, 0)
-
-                        for REQUEST in REQUESTS_FILTERED:
-                            (UID, TIME_DELTA, _) := REQUEST
-                            (TOTAL_TIME, NUMBER_OF_PROCESSED_REQUESTS) := USER_DATA_COMBINED[UID]
-                            NEW_NUMBER_OF_PROCESSED_REQUESTS: Uint := NUMBER_OF_PROCESSED_REQUESTS + 1
-                            NEW_TOTAL_TIME: Uint := TOTAL_TIME + TIME_DELTA
-                            USER_DATA_COMBINED[UID] := (NEW_TOTAL_TIME, NEW_NUMBER_OF_PROCESSED_REQUESTS)
                         
+                        REQUESTS_SORTED: [(UID, Time, Time)] := elements (UID,_,_) from REQUESTS_FILTERED sorted by UID
 
-                        USER_DATA_NORMALIZED: [(UID, Time)] := empty array
-                        for (UID, (TOTAL_TIME, NUMBER_OF_PROCESSED_REQUESTS)) in items(USER_DATA):
-                            AVERAGE_TIME: Time := TOTAL_TIME / NUMBER_OF_PROCESSED_REQUESTS
-                            append (UID, AVERAGE_TIME) to USER_DATA
-                            
-                        USER_DATA_SORTED: [(UID, Time)] := elements (UID, TIME) from USER_DATA_NORMALIZED sorted by TIME
-
+                        USER_DATA: [(UID, Time)] := empty array
+                        
+                        USER_TOTAL_TIME: Time := 0
+                        USER_TOTAL_REQUESTS: Uint := 0
+                        (USER_UID_PREV, _, _) := REQUESTS_SORTED[0]
+                        
+                        for I, REQUEST in enumerate(REQUESTS_SORTED):
+                            (USER_UID, TS1, TS2) := REQUEST
+                            USER_TOTAL_TIME := USER_TOTAL_TIME + (TS2 - TS1)
+                            USER_TOTAL_REQUESTS := USER_TOTAL_REQUESTS + 1
+                            if USER_UID != USER_UID_PREV || I == length(REQUESTS_SORTED) - 1:
+                                append (UID, USER_TOTAL_TIME/USER_TOTAL_REQUESTS) to USER_DATA
+                                USER_UID_PREV := USER_UID
+                        
+                        USER_DATA_SORTED: [(UID, Time)] := descending elements (_, TS2) of USER_DATA sorted by TS2
                         (_, CUTOFF_TIME): Time := USER_DATA_SORTED[9 * length / 10]
 
                         SLOWEST_USERS_LIST := list of UID from elements (UID, TIME) of USER_DATA_SORTED where TIME > CUTOFF_TIME
