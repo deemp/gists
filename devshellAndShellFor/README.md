@@ -18,3 +18,14 @@ The following tools are available in the default `devShell`:
 - the `GHC` compiler
 - the `Haskell Language Server`
 - dependencies of local packages
+
+## Composing devshells using direnv
+
+`direnv` can run multiple devshells and `shellHooks`
+
+```console
+use flake
+eval "$shellHook"
+use flake .#another
+eval "$shellHook"
+```

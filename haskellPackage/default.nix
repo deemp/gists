@@ -8,15 +8,9 @@ let
     rev = "v${version}";
     sha256 = "sha256-1wyuzAAGXe+FybnutlmZbA2jLjQzmr4fI3rZfmEoCdY=";
   };
-  inherit (pkgs.haskell.lib) overrideCabal justStaticExecutables;
-  ghcVersion = "928";
-  hpkgs = pkgs.haskell.packages."ghc${ghcVersion}";
-  # executableToolDepends - from "sv2v" expression in https://raw.githubusercontent.com/NixOS/nixpkgs/nixos-unstable/pkgs/development/haskell-modules/hackage-packages.nix
-  package = overrideCabal (hpkgs.callCabal2nix pname src.outPath { })
-    (x: { executableToolDepends = [ pkgs.alex pkgs.happy ] ++ (x.executableToolDepends or [ ]); });
-
+  package = pkgs.haskellPackages.callCabal2nix pname src.outPath { };
   packages = {
-    default = justStaticExecutables package;
+    default = pkgs.haskell.lib.justStaticExecutables package;
     inherit package;
   };
 in

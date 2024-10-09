@@ -1,15 +1,33 @@
 {
   inputs.nixpkgs.url = "github:nixos/nixpkgs/master";
   outputs = inputs: {
-    foo = inputs.nixpkgs.lib.evalModules {
+    abra = inputs.nixpkgs.lib.evalModules {
       modules = [
         (
           { lib, ... }:
           {
             options = {
+              # Overrides `description`
+              # 
+              # nix-repl> abra.options.bar.type.description
+              # "submodule"
+              # 
+              foo = lib.mkOption rec {
+                type =
+                  let submodule = modules:
+                    lib.types.submoduleWith {
+                      shorthandOnlyDefinesConfig = true;
+                      modules = lib.toList modules;
+                      description = "description";
+                    };
+                  in
+                  submodule { options = { }; };
+                default = { };
+              };
+
               # No overriding!!
               # 
-              # nix-repl> foo.options.bar.type.description
+              # nix-repl> abra.options.bar.type.description
               # "submodule"
               # 
               bar = lib.mkOption {
@@ -25,7 +43,7 @@
 
               # Overrides OK
               # 
-              # nix-repl> foo.options.baz.type.description
+              # nix-repl> abra.options.baz.type.description
               # "description"
               # 
               baz = lib.mkOption {

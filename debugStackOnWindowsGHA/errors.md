@@ -136,3 +136,86 @@ Error: [S-7282]
        D:\a\normalizer\normalizer\eo-phi-normalizer\.stack-work\dist\ab060f89\setup\setup --verbose=1 --builddir=.stack-work\dist\ab060f89 build lib:eo-phi-normalizer exe:normalizer --ghc-options " -fdiagnostics-color=always"
        Process exited with code: ExitFailure 1
 ```
+
+## Scenario 4
+
+Edit `eo-phi-normalizer/Setup.hs`.
+
+```hs
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE QuasiQuotes #-}
+
+-- Source: https://github.com/haskell/cabal/issues/6726#issuecomment-918663262
+
+-- | Custom Setup that runs bnfc to generate the language sub-libraries
+-- for the parsers included in Ogma.
+module Main (main) where
+
+import Distribution.Simple (defaultMainWithHooks, hookedPrograms, postConf, preBuild, simpleUserHooks)
+import Distribution.Simple.Program (Program (..), findProgramVersion, simpleProgram)
+import PyF (fmt)
+import System.Process (system)
+
+-- | Run BNFC, happy, and alex on the grammar before the actual build step.
+--
+-- All options for bnfc are hard-coded here.
+main :: IO ()
+main =
+  defaultMainWithHooks $
+    simpleUserHooks
+      { hookedPrograms = [bnfcProgram]
+      , postConf = \args flags packageDesc localBuildInfo -> do
+          _ <-
+            system $
+              [fmt|
+                chcp 65001 ^
+                    && bnfc --haskell -d -p Language.EO.Phi --generic -o src/ grammar/EO/Phi/Syntax.cf ^
+                    && cd src/Language/EO/Phi/Syntax ^
+                    && alex Lex.x ^
+                    && happy Par.y
+              |]
+          postConf simpleUserHooks args flags packageDesc localBuildInfo
+      }
+
+-- | NOTE: This should be in Cabal.Distribution.Simple.Program.Builtin.
+bnfcProgram :: Program
+bnfcProgram =
+  (simpleProgram "bnfc")
+    { programFindVersion = findProgramVersion "--version" id
+    }
+```
+
+```console
+D:\a\normalizer\normalizer>rm -rf eo-phi-normalizer/src/Language/EO/Phi/Syntax
+
+D:\a\normalizer\normalizer>stack build --reconfigure
+eo-phi-normalizer> configure (lib + exe)
+eo-phi-normalizer> [1 of 3] Compiling Main             ( D:\a\normalizer\normalizer\eo-phi-normalizer\Setup.hs, D:\a\normalizer\normalizer\eo-phi-normalizer\.stack-work\dist\ab060f89\setup\Main.o ) [Source file changed]
+eo-phi-normalizer> [3 of 3] Linking D:\a\normalizer\normalizer\eo-phi-normalizer\.stack-work\dist\ab060f89\setup\setup.exe [Objects changed]
+eo-phi-normalizer> Configuring eo-phi-normalizer-0.3.1...
+eo-phi-normalizer> build (lib + exe) with ghc-9.6.4
+eo-phi-normalizer> Preprocessing library for eo-phi-normalizer-0.3.1..
+eo-phi-normalizer> Building library for eo-phi-normalizer-0.3.1..
+eo-phi-normalizer> 
+eo-phi-normalizer> <no location info>: warning: [GHC-32850] [-Wmissing-home-modules]
+eo-phi-normalizer>     These modules are needed for compilation but not listed in your .cabal file's other-modules for `eo-phi-normalizer-0.3.1-K95HcCWlixTEfLIOzDdndy' :
+eo-phi-normalizer>         Language.EO.Phi.Syntax.Lex Language.EO.Phi.Syntax.Par
+eo-phi-normalizer> [ 2 of 16] Compiling Language.EO.Phi.Syntax.Par [Language.EO.Phi.Syntax.Abs changed]
+eo-phi-normalizer> 
+eo-phi-normalizer> .stack-work\dist\ab060f89\build\Language\EO\Phi\Syntax\Par.hs:26:1: error:
+eo-phi-normalizer>     Could not find module `Language.EO.Phi.Syntax.Abs'
+eo-phi-normalizer>     Use -v (or `:set -v` in ghci) to see a list of the files searched for.
+eo-phi-normalizer>    |
+eo-phi-normalizer> 26 | import qualified Language.EO.Phi.Syntax.Abs
+eo-phi-normalizer>    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error: [S-7282]
+       Stack failed to execute the build plan.
+
+       While executing the build plan, Stack encountered the error:
+
+       [S-7011]
+       While building package eo-phi-normalizer-0.3.1 (scroll up to its section to see the error) using:
+       D:\a\normalizer\normalizer\eo-phi-normalizer\.stack-work\dist\ab060f89\setup\setup --verbose=1 --builddir=.stack-work\dist\ab060f89 build lib:eo-phi-normalizer exe:normalizer --ghc-options " -fdiagnostics-color=always"
+       Process exited with code: ExitFailure 1
+```

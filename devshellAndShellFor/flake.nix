@@ -4,7 +4,7 @@
     flake-utils.follows = "flake-utils_/flake-utils";
     nixpkgs_.url = "github:deemp/flakes?dir=source-flake/nixpkgs";
     nixpkgs.follows = "nixpkgs_/nixpkgs";
-    devshell.url = "github:deemp/devshell/packages-from-upd";
+    devshell.url = "github:numtide/devshell";
   };
   outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem (system:
     let
@@ -50,6 +50,13 @@
           (let cabal = pkgs.cabal-install; in { name = cabal.pname; help = cabal.meta.description; package = cabal; category = "tools"; })
           (let hls = hpkgs.haskell-language-server; in { name = hls.pname; help = hls.meta.description; package = hls; category = "tools"; })
         ];
+      };
+      
+      devShells.another = pkgs.mkShell {
+        shellHook = ''
+          ${pkgs.hello}/bin/hello
+          export P=1
+        '';
       };
     in
     {
